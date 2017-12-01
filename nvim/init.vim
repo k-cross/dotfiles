@@ -1,6 +1,6 @@
 "<AUTHOR> k-cross
 
-set runtimepath+=~/.config/nvim/dein
+set runtimepath+=~/.config/nvim/dein/repos/github.com/Shougo/dein.vim
 
 if dein#load_state(expand('~/.config/nvim/infections'))
     call dein#begin(expand('~/.config/nvim/infections'))
@@ -43,7 +43,7 @@ set relativenumber
 set hidden
 set background=dark
 
-let g:airline_powerline_fonts = 1
+"let g:airline_powerline_fonts = 1
 let g:deoplete#enable_at_startup = 1
 
 " Trigger configuration for YCM and UltiSnips
