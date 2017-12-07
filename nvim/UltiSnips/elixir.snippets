@@ -1,0 +1,14 @@
+snippet ut
+defmodule ${1:ModuleName.ModuleTest} do
+  @moduledoc false
+
+  use ExUnit.Case, async: true
+
+  setup do
+    $0
+  end
+
+  test "${2:some test}" do
+  end
+end
+endsnippet
