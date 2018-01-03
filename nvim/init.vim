@@ -1,6 +1,6 @@
 "<AUTHOR> k-cross
 
-set runtimepath+=~/.config/nvim/dein/repos/github.com/Shougo/dein.vim
+set runtimepath+=~/.config/nvim/dein
 
 if dein#load_state(expand('~/.config/nvim/infections'))
     call dein#begin(expand('~/.config/nvim/infections'))
