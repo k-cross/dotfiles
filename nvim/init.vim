@@ -1,10 +1,11 @@
 "<AUTHOR> k-cross
 
-set runtimepath+=~/.config/nvim/dein
+set runtimepath+=~/.config/nvim/infections/repos/github.com/Shougo/dein.vim
 
 if dein#load_state(expand('~/.config/nvim/infections'))
     call dein#begin(expand('~/.config/nvim/infections'))
     call dein#add('w0rp/ale')
+    call dein#add('Shougo/dein.vim')
     call dein#add('Shougo/deoplete.nvim')
     call dein#add('vim-airline/vim-airline')
     call dein#add('godlygeek/tabular')
