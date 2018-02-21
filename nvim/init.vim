@@ -7,7 +7,9 @@ if dein#load_state(expand('~/.config/nvim/infections'))
     call dein#add('w0rp/ale')
     call dein#add('Shougo/dein.vim')
     call dein#add('Shougo/deoplete.nvim')
+    call dein#add('elmcast/elm-vim')
     call dein#add('vim-airline/vim-airline')
+    call dein#add('mileszs/ack.vim')
     call dein#add('godlygeek/tabular')
     call dein#add('sirver/UltiSnips')
     call dein#add('ctrlpvim/ctrlp.vim')
@@ -31,6 +33,7 @@ nmap <F7> :NERDTreeToggle<CR>
 nmap <F8> :TagbarToggle<CR>
 nmap ;p :Prettier<CR>
 
+let g:polyglow_disabled = ['elm']
 let g:gutentags_cache_dir = '~/.tags_cache'
 let g:gutentags_ctags_exclude = ['*.css', '*node_modules']
 let g:alchemist_tag_disable = 1
@@ -55,6 +58,10 @@ set mouse=a
 set relativenumber
 set hidden
 set background=dark
+
+if executable('ag')
+    let g:ackprg = 'ag --vimgrep'
+endif
 
 "let g:airline_powerline_fonts = 1
 let g:deoplete#enable_at_startup = 1
