@@ -12,3 +12,35 @@ defmodule ${1:ModuleName.ModuleTest} do
   end
 end
 endsnippet
+
+snippet def
+@spec ${3:name}(${4:types}) :: ${5:return types}
+def ${1:name}(${2:args}) do
+  $0
+end
+endsnippet
+
+snippet de
+@spec ${4:name}(${5:types}) :: ${6:return types}
+def ${1:name}(${2:args}),${3: when} do: $0
+endsnippet
+
+snippet mod
+defmodule ${1:Name} do
+  @moduledoc "${2:Logic for CRUD operations}"
+
+${3:  require Logger}
+
+${4:  alias Something}
+
+  $0
+end
+endsnippet
+
+snippet map
+Enum.map($0)
+endsnippet
+
+snippet red
+Enum.reduce(${1:acc}, ${2:fn})
+endsnippet

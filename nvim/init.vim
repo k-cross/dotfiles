@@ -1,5 +1,7 @@
 "<AUTHOR> k-cross
 
+let g:python3_host_prog = '/usr/local/bin/python3'
+
 set runtimepath+=~/.config/nvim/infections/repos/github.com/Shougo/dein.vim
 
 if dein#load_state(expand('~/.config/nvim/infections'))
@@ -7,11 +9,11 @@ if dein#load_state(expand('~/.config/nvim/infections'))
     call dein#add('w0rp/ale')
     call dein#add('Shougo/dein.vim')
     call dein#add('Shougo/deoplete.nvim')
-    call dein#add('elmcast/elm-vim')
     call dein#add('vim-airline/vim-airline')
     call dein#add('mileszs/ack.vim')
+    call dein#add('tpope/vim-fugitive')
     call dein#add('godlygeek/tabular')
-    call dein#add('sirver/UltiSnips')
+    call dein#add('SirVer/ultisnips')
     call dein#add('ctrlpvim/ctrlp.vim')
     call dein#add('scrooloose/nerdtree')
     call dein#add('ludovicchabant/vim-gutentags')
@@ -33,17 +35,16 @@ nmap <F7> :NERDTreeToggle<CR>
 nmap <F8> :TagbarToggle<CR>
 nmap ;p :Prettier<CR>
 
-let g:polyglow_disabled = ['elm']
 let g:gutentags_cache_dir = '~/.tags_cache'
 let g:gutentags_ctags_exclude = ['*.css', '*node_modules']
 let g:alchemist_tag_disable = 1
 let g:airline#extensions#ale#enabled = 1
 if executable('ag')
     let g:ctrlp_user_command = 
-        \ 'ag %s --files-with-matches -g "" --ignore "\.git$\|\.hg$\|\.svn$"'
+        \ 'ag %s --files-with-matches -g "" --ignore "\.git$\|\.hg$\|\.svn$|node_modules$"'
     let g:ctrlp_use_cacheing = 0
 else
-  let g:ctrlp_custom_ignore = '\.git$\|\.hg$\|\.svn$'
+  let g:ctrlp_custom_ignore = '\.git$\|\.hg$\|\.svn$|node_modules$'
   let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files . --cached --exclude-standard --others']
 endif
 
@@ -63,7 +64,6 @@ if executable('ag')
     let g:ackprg = 'ag --vimgrep'
 endif
 
-"let g:airline_powerline_fonts = 1
 let g:deoplete#enable_at_startup = 1
 let g:UltiSnipsExpandTrigger="<C-e>"
 
