@@ -56,7 +56,8 @@ tmap <C-a><C-a> <C-\><C-n>
 
 set tabstop=4 shiftwidth=4 softtabstop=4 scrolloff=2 expandtab
 set mouse=a
-set relativenumber
+set cursorline
+set number
 set hidden
 set background=dark
 
