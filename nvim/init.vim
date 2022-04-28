@@ -31,7 +31,7 @@ autocmd BufNewFile,BufReadPost *.tex setlocal filetype=tex spell
 
 " Plugin Settings
 set rtp+=~/.config/nvim/infections/repos/github.com/Shougo/dein.vim
-set rtp+=~/usr/local/opt/fzf
+set rtp+=/usr/local/opt/fzf
 
 if dein#load_state(expand('~/.config/nvim/infections'))
     call dein#begin(expand('~/.config/nvim/infections'))
