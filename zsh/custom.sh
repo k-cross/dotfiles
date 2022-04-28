@@ -17,7 +17,15 @@ pubip() {
 }
 
 # Environment Variables
-export KERL_CONFIGURE_OPTIONS="--disable-debug --without-javac"
-export ERL_AFLAGS="-kernel shell_history enabled"
+
+## FZF
 export FZF_DEFAULT_COMMAND='fd --type f'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
+## Erlang
+export KERL_CONFIGURE_OPTIONS="--disable-debug --without-javac"
+export ERL_AFLAGS="-kernel shell_history enabled"
+
+## Rust
+export RUST_LOG=trace
+export RUST_BACKTRACE=1

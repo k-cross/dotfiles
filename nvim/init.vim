@@ -14,6 +14,7 @@ set wildignore+=**/node_modules/**,*/target/*,*/_build/*
 
 let g:python3_host_prog = '/usr/local/bin/python3'
 
+filetype plugin indent on
 autocmd FileType python setlocal ts=4 sts=4 sw=4 expandtab
 autocmd FileType verilog setlocal ts=4 sts=4 sw=4 expandtab
 autocmd FileType text setlocal spell
@@ -35,34 +36,65 @@ set rtp+=/usr/local/opt/fzf
 
 if dein#load_state(expand('~/.config/nvim/infections'))
     call dein#begin(expand('~/.config/nvim/infections'))
-    call dein#add('w0rp/ale')
+    call dein#add('Shatur/neovim-ayu')
     call dein#add('Shougo/dein.vim')
-    call dein#add('junegunn/fzf.vim')
-    call dein#add('vim-airline/vim-airline')
-    call dein#add('reedes/vim-wordy')
-    call dein#add('tpope/vim-fugitive')
-    call dein#add('tpope/vim-surround')
     call dein#add('SirVer/ultisnips')
+    call dein#add('elixir-editors/vim-elixir')
+    call dein#add('junegunn/fzf.vim')
+    call dein#add('pangloss/vim-javascript')
+    call dein#add('preservim/tagbar')
+    call dein#add('reedes/vim-wordy')
+    call dein#add('rust-lang/rust.vim')
     call dein#add('scrooloose/nerdtree')
     call dein#add('sheerun/vim-polyglot')
-    call dein#add('elixir-editors/vim-elixir')
-    call dein#add('rust-lang/rust.vim')
-    call dein#add('pangloss/vim-javascript')
+    call dein#add('tpope/vim-fugitive')
+    call dein#add('vim-airline/vim-airline')
+    call dein#add('vim-erlang/vim-erlang')
+    call dein#add('w0rp/ale')
     call dein#end()
     call dein#save_state()
 endif
 
 let g:airline#extensions#ale#enabled = 1
 let g:UltiSnipsExpandTrigger="<C-e>"
+let g:tagbar_type_elixir = {
+    \ 'ctagstype' : 'elixir',
+    \ 'kinds' : [
+        \ 'p:protocols',
+        \ 'm:modules',
+        \ 'e:exceptions',
+        \ 'y:types',
+        \ 'd:delegates',
+        \ 'f:functions',
+        \ 'c:callbacks',
+        \ 'a:macros',
+        \ 't:tests',
+        \ 'i:implementations',
+        \ 'o:operators',
+        \ 'r:records'
+    \ ],
+    \ 'sro' : '.',
+    \ 'kind2scope' : {
+        \ 'p' : 'protocol',
+        \ 'm' : 'module'
+    \ },
+    \ 'scope2kind' : {
+        \ 'protocol' : 'p',
+        \ 'module' : 'm'
+    \ },
+    \ 'sort' : 0
+\ }
 
 " ALE plugin setup
 let g:ale_completion_enabled = 1
+let g:ale_completion_autoimport = 1
 let g:ale_fix_on_save = 1
-let g:ale_linters = {'rust': ['rust-analyzer']}
+let g:ale_linters = {'rust': ['rust-analyzer'], 'yaml': ['yamllint']}
 let g:ale_fixers = {'rust': ['rustfmt'], 'javascript': ['prettier'], 'elixir': ['mix_format']}
 
 nmap <F7> :NERDTreeToggle<CR>
 nmap <F8> :NextWordy<CR>
+nmap ;w :NextWordy<CR>
 
 " Exit Vim if NERDTree is the only window left.
 autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() |
@@ -74,4 +106,4 @@ let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 1
 
 " Vim Settings After Plugins
-colorscheme pablo
+colorscheme ayu-dark
