@@ -1,0 +1,30 @@
+snippet fileheader
+/*
+ * <Author> ${1:Kenneth Cross}
+ * <Date> ${2:`date +%m/%d/%Y`}
+ * <Matter> ${3:Whatever this is about}
+ */
+
+$0
+endsnippet
+
+snippet main
+int main(int argc, char* argv[]){
+  $0
+
+  return 0;
+}
+endsnippet
+
+snippet class
+class ${1:class_name}{
+public:
+  ${2:functions}
+
+private:
+  $1 {} /* Constructor */
+  ~$1 {} /* Destructor */
+  ${3:variables}
+$0
+};
+endsnippet

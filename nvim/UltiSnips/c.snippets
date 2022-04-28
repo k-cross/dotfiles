@@ -1,0 +1,23 @@
+snippet main
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(${1:int argc, char *argv[]}){
+  $0
+
+  return 0;
+}
+endsnippet
+
+snippet inc
+#include <${0:assert.h}>
+endsnippet
+
+snippet fileheader
+/* 
+ * <AUTHOR> ${1:Kennth Cross}
+ * <DATE>   ${2:`date +%m/%d/%Y`}
+ * <MATTER> ${3:This file serves the purpose of?}
+ */
+$0
+endsnippet

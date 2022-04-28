@@ -1,0 +1,55 @@
+snippet ut
+defmodule ${1:ModuleName.ModuleTest} do
+  @moduledoc false
+
+  use ExUnit.Case, async: true
+
+  setup do
+    $0
+  end
+
+  test "${2:some test}" do
+  end
+end
+endsnippet
+
+snippet def
+@spec ${3:name}(${4:types}) :: ${5:return types}
+def ${1:name}(${2:args}) do
+  $0
+end
+endsnippet
+
+snippet de
+@spec ${4:name}(${5:types}) :: ${6:return types}
+def ${1:name}(${2:args}),${3: when} do: $0
+endsnippet
+
+snippet mod
+defmodule ${1:Name} do
+  @moduledoc "${2:Logic for CRUD operations}"
+
+${3:  require Logger}
+
+${4:  alias Something}
+
+  $0
+end
+endsnippet
+
+snippet map
+Enum.map($0)
+endsnippet
+
+snippet red
+Enum.reduce(${1:acc}, ${2:fn})
+endsnippet
+
+snippet qlo
+@desc "${1:Desc}"
+object :${2:obj_name} do
+  @desc "${3:Fild Description}"
+  field(:${4:f_name}, ${5:f_type})
+  $0
+end
+endsnippet
