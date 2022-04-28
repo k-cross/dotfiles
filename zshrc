@@ -4,6 +4,7 @@ alias gs='git status'
 
 export FZF_DEFAULT_COMMAND='fd --type f'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export KERL_CONFIGURE_OPTIONS="--disable-debug --without-javac"
 export ZSH="$HOME/.oh-my-zsh"
 
 ZSH_THEME="gnzh"
