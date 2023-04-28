@@ -2,8 +2,6 @@
 alias imx="iex -S mix"
 alias ipx="iex -S mix phx.server"
 alias itx="MIX_ENV=test iex -S mix"
-alias blog="gatsby develop"
-alias js="npm run"
 alias gco="git checkout"
 alias gs="git status"
 alias gds="git diff --stat"
