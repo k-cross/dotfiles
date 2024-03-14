@@ -1,0 +1,30 @@
+import = ["/Users/kencross/.config/alacritty/themes/themes/alabaster_dark.toml"]
+
+[font]
+size = 13.0
+
+[font.bold]
+family = "Mononoki Nerd Font Mono"
+style = "Bold"
+
+[font.bold_italic]
+family = "Mononoki Nerd Font Mono"
+style = "Bold Italic"
+
+[font.italic]
+family = "Mononoki Nerd Font Mono"
+style = "Italic"
+
+[font.normal]
+family = "Mononoki Nerd Font Mono"
+style = "Regular"
+
+[scrolling]
+history = 10000
+multiplier = 3
+
+[selection]
+save_to_clipboard = true
+
+[window]
+option_as_alt = "OnlyRight"
