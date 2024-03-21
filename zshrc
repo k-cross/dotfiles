@@ -6,9 +6,11 @@ export UPDATE_ZSH_DAYS=30
 # Uncomment the following line to display red dots whilst waiting for completion.
 COMPLETION_WAITING_DOTS="true"
 
-plugins=(asdf colored-man-pages command-not-found macos mix git)
+plugins=(colored-man-pages command-not-found macos mix git)
 
 source $ZSH/oh-my-zsh.sh
 source $HOME/.config/zsh/custom.sh
 
+eval "$(/opt/homebrew/bin/brew shellenv)"
 eval "$(starship init zsh)"
+eval "$(~/.local/bin/mise activate zsh)"
