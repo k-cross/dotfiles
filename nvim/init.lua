@@ -2,47 +2,9 @@
 local autocmd = vim.api.nvim_create_autocmd
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 
-vim.keymap.set("n", "<C-k>", "<C-w>k")
-vim.keymap.set("n", "<C-l>", "<C-w>l")
-vim.keymap.set("n", "<C-h>", "<C-w>h")
-vim.keymap.set("n", "<C-j>", "<C-w>j")
-
--- Plugin Mappings
-vim.keymap.set("n", "<F7>", ":NERDTreeToggle<CR>")
-vim.keymap.set("n", "<F8>", ":TagbarToggle<CR>")
-vim.keymap.set("n", ";w", ":NextWordy<CR>")
-
-vim.opt.tabstop = 4
-vim.opt.shiftwidth = 4
-vim.opt.softtabstop = 4
-vim.opt.scrolloff = 2
-vim.opt.expandtab = true
-vim.opt.mouse = "a"
-vim.opt.cursorline = true
-vim.opt.number = true
-vim.opt.wildignore =
-	{ "*/tmp/*", "*/target/*", "*.so", "*.swp", "*.zip", "*/_build/*", "*/node_modules/*", "*/.git/*", "*/deps/*" }
-
---vim.g.python3_host_prog = "/usr/bin/env python3"
-
-autocmd("FileType", {
-	pattern = { "python", "verilog" },
-	command = "setlocal ts=4 sts=4 sw=4 expandtab",
-})
-
-autocmd("FileType", {
-	pattern = { "c", "lua", "tex", "html", "javascript", "java" },
-	command = "setlocal ts=4 sts=4 sw=4 expandtab",
-})
-
-autocmd("FileType", { pattern = { "text" }, command = "setlocal spell" })
-
-autocmd({ "BufNewFile", "BufReadPost" }, { pattern = "*.kdl", command = "setlocal filetype=kdl" })
-autocmd({ "BufNewFile", "BufReadPost" }, { pattern = "*.lua", command = "setlocal filetype=lua" })
-autocmd({ "BufNewFile", "BufReadPost" }, { pattern = "*.json", command = "setlocal filetype=javascript" })
-autocmd({ "BufNewFile", "BufReadPost" }, { pattern = "*.md", command = "setlocal filetype=markdown spell" })
-autocmd({ "BufNewFile", "BufReadPost" }, { pattern = "*.csv", command = "setlocal filetype=csv" })
-autocmd({ "BufNewFile", "BufReadPost" }, { pattern = "*.tex", command = "setlocal filetype=tex spell" })
+-- disable netrw at the very start of your init.lua
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
 
 -- Plugin Settings
 if not vim.loop.fs_stat(lazypath) then
@@ -63,11 +25,52 @@ require("lazy").setup({
 		"elixir-editors/vim-elixir",
 		"imsnif/kdl.vim",
 		"junegunn/fzf.vim",
+		"nvim-tree/nvim-tree.lua",
 		"preservim/tagbar",
 		"reedes/vim-wordy",
-		"scrooloose/nerdtree",
-		"sheerun/vim-polyglot",
 		"tpope/vim-fugitive",
+		{
+			"williamboman/mason.nvim",
+			cmd = "Mason",
+			keys = { { "<leader>cm", "<cmd>Mason<cr>", desc = "Mason" } },
+			build = ":MasonUpdate",
+			opts = {
+				ensure_installed = {
+					"pyright",
+					"stylua",
+					"shfmt",
+					"typescript-language-server",
+					-- "flake8",
+				},
+			},
+			---@param opts MasonSettings | {ensure_installed: string[]}
+			config = function(_, opts)
+				require("mason").setup(opts)
+				local mr = require("mason-registry")
+				mr:on("package:install:success", function()
+					vim.defer_fn(function()
+						-- trigger FileType event to possibly load this newly installed LSP server
+						require("lazy.core.handler.event").trigger({
+							event = "FileType",
+							buf = vim.api.nvim_get_current_buf(),
+						})
+					end, 100)
+				end)
+				local function ensure_installed()
+					for _, tool in ipairs(opts.ensure_installed) do
+						local p = mr.get_package(tool)
+						if not p:is_installed() then
+							p:install()
+						end
+					end
+				end
+				if mr.refresh then
+					mr.refresh(ensure_installed)
+				else
+					ensure_installed()
+				end
+			end,
+		},
 		{
 			"stevearc/conform.nvim",
 			opts = {
@@ -76,6 +79,7 @@ require("lazy").setup({
 					-- Conform will run multiple formatters sequentially
 					python = { "black" },
 					rust = { "rustfmt" },
+					javascript = { "prettierd" },
 					["*"] = { "trim_whitespace" },
 				},
 				format_on_save = {
@@ -87,53 +91,46 @@ require("lazy").setup({
 		},
 		{
 			"neovim/nvim-lspconfig",
-			dependencies = {
-				"williamboman/mason.nvim",
-				"williamboman/mason-lspconfig.nvim",
+			dependencies = {},
+			opts = {
+				servers = {
+					tsserver = {
+						cmd = {
+							vim.fn.stdpath("data")
+								.. "/mason/packages/typescript-language-server/node_modules/typescript-language-server/lib/cli.js",
+							"--stdio",
+						},
+						on_attach = function(client, bufnr)
+							-- use null-ls & eslint_d for formatting
+							client.server_capabilities.documentFormattingProvider = false
+							enhance_attach(client, bufnr)
+						end,
+						flags = {
+							debounce_text_changes = 150,
+						},
+						capabilities = capabilities,
+					},
+					pyright = {
+						cmd = {
+							vim.fn.stdpath("data") .. "/mason/bin/pyright-langserver",
+							"--stdio",
+						},
+						on_attach = enhance_attach,
+						capabilities = capabilities,
+						settings = {
+							python = {
+								analysis = {
+									typeCheckingMode = "off",
+									autoSearchPaths = true,
+									useLibraryCodeForTypes = false,
+									diagnosticMode = "openFilesOnly",
+									autoImportCompletions = true,
+								},
+							},
+						},
+					},
+				},
 			},
-			--opts = {
-			--	servers = {
-			--		tsserver = {
-			--			keys = {
-			--				{
-			--					"<leader>co",
-			--					function()
-			--						vim.lsp.buf.code_action({
-			--							apply = true,
-			--							context = {
-			--								only = { "source.organizeImports.ts" },
-			--								diagnostics = {},
-			--							},
-			--						})
-			--					end,
-			--					desc = "Organize Imports",
-			--				},
-			--				{
-			--					"<leader>cR",
-			--					function()
-			--						vim.lsp.buf.code_action({
-			--							apply = true,
-			--							context = {
-			--								only = { "source.removeUnused.ts" },
-			--								diagnostics = {},
-			--							},
-			--						})
-			--					end,
-			--					desc = "Remove Unused Imports",
-			--				},
-			--			},
-			--			---@diagnostic disable-next-line: missing-fields
-			--			settings = {
-			--				completions = {
-			--					completeFunctionCalls = true,
-			--				},
-			--			},
-			--		},
-			--		pyright = {
-			--			enabled = lsp == "pyright",
-			--		},
-			--	},
-			--},
 		},
 		{
 			"nvim-treesitter/nvim-treesitter",
@@ -257,7 +254,48 @@ require("lazy").setup({
 	},
 })
 
-vim.opt.rtp:prepend("/usr/local/opt/fzf")
+vim.opt.rtp:prepend("/opt/homebrew/bin/fzf")
 
 -- Vim Settings After Plugins
 vim.cmd.colorscheme("ayu-dark")
+
+-- Key Mappings
+vim.keymap.set("n", "<C-k>", "<C-w>k")
+vim.keymap.set("n", "<C-l>", "<C-w>l")
+vim.keymap.set("n", "<C-h>", "<C-w>h")
+vim.keymap.set("n", "<C-j>", "<C-w>j")
+
+-- Plugin Mappings
+vim.keymap.set("n", "<F7>", ":NvimTreeToggle<CR>")
+vim.keymap.set("n", "<F8>", ":TagbarToggle<CR>")
+vim.keymap.set("n", ";w", ":NextWordy<CR>")
+
+vim.opt.tabstop = 4
+vim.opt.shiftwidth = 4
+vim.opt.softtabstop = 4
+vim.opt.scrolloff = 2
+vim.opt.expandtab = true
+vim.opt.mouse = "a"
+vim.opt.cursorline = true
+vim.opt.number = true
+vim.opt.wildignore =
+	{ "*/tmp/*", "*/target/*", "*.so", "*.swp", "*.zip", "*/_build/*", "*/node_modules/*", "*/.git/*", "*/deps/*" }
+
+autocmd("FileType", {
+	pattern = { "python", "verilog" },
+	command = "setlocal ts=4 sts=4 sw=4 expandtab",
+})
+
+autocmd("FileType", {
+	pattern = { "c", "lua", "tex", "html", "javascript", "java" },
+	command = "setlocal ts=4 sts=4 sw=4 expandtab",
+})
+
+autocmd("FileType", { pattern = { "text" }, command = "setlocal spell" })
+
+autocmd({ "BufNewFile", "BufReadPost" }, { pattern = "*.kdl", command = "setlocal filetype=kdl" })
+autocmd({ "BufNewFile", "BufReadPost" }, { pattern = "*.lua", command = "setlocal filetype=lua" })
+autocmd({ "BufNewFile", "BufReadPost" }, { pattern = "*.json", command = "setlocal filetype=javascript" })
+autocmd({ "BufNewFile", "BufReadPost" }, { pattern = "*.md", command = "setlocal filetype=markdown spell" })
+autocmd({ "BufNewFile", "BufReadPost" }, { pattern = "*.csv", command = "setlocal filetype=csv" })
+autocmd({ "BufNewFile", "BufReadPost" }, { pattern = "*.tex", command = "setlocal filetype=tex spell" })
