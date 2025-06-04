@@ -1,0 +1,7 @@
+[tools]
+erlang = "latest"
+elixir = "latest"
+python = "latest"
+go = "latest"
+uv = "latest"
+ruff = "latest"
