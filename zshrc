@@ -17,3 +17,4 @@ source $HOME/.config/zsh/custom.sh
 eval "$(/opt/homebrew/bin/brew shellenv)"
 eval "$(starship init zsh)"
 eval "$(mise activate zsh)"
+eval "$(direnv hook zsh)"

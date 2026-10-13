@@ -1,0 +1,10 @@
+theme = Ayu
+font-family = "0XProto Nerd Font Mono"
+
+macos-option-as-alt = right
+keybind = alt+h=goto_split:left
+keybind = alt+j=goto_split:bottom
+keybind = alt+k=goto_split:top
+keybind = alt+l=goto_split:right
+
+unfocused-split-opacity = 0.8
